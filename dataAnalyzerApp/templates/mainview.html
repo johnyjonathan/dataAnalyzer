@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<form method="POST">
+    {% csrf_token %}
+<div class="mt-5 mb-3 mx-3">
+    <input type="submit" class="btn btn-secondary btn-sm" name="execute_mode" id="mode_button" value="Mode">
+    <input type="submit" class="btn btn-secondary btn-sm" name="execute_mean" id="mean_button" value="Mean">
+    <input type="submit" class="btn btn-secondary btn-sm" name="execute_median" id="median_button" value="Median">
+    <input type="submit" class="btn btn-secondary btn-sm" name="execute_datarange" id="range_button" value="Range">
+    <input type="submit" class="btn btn-secondary btn-sm" name="execute_q1" id="range_button" value="Q1">
+    <input type="submit" class="btn btn-secondary btn-sm" name="execute_q2" id="range_button" value="Q2">
+    <input type="submit" class="btn btn-secondary btn-sm" name="execute_q3" id="range_button" value="Q3">
+    <input type="submit" class="btn btn-secondary btn-sm" name="execute_IQR" id="range_button" value="IQR">
+    <input type="submit" class="btn btn-secondary btn-sm" name="execute_summary" id="range_button" value="Summary">
+    <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#PlotModal">
+        Plot
+      </button>
+</div>
+<div class="modal fade" id="PlotModal" tabindex="-1" aria-labelledby="PlotModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="PlotModalLabel">Generate plots</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {%csrf_token%}
+            {% for element in numeric_cols %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="cols_for_plot" id="cols_checkbox" value="{{element}}">
+                <label class="form-check-label" for="cols_checkbox">
+                  {{element}}
+                </label>
+            </div>
+            {%endfor%}
+            <div class="form-check form-switch mt-3">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="class_separation">
+                <label class="form-check-label" for="flexSwitchCheckDefault">class separation</label>
+            </div>
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" name="generate_plot" value="Generate">
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="col-4 mx-3 mb-3">
+<select class="form-select" aria-label="Default select example" name="col_select">
+    {% for element in columns %}
+    <option value="{{element}}"> {{element}} </option>
+{% endfor %}
+  </select>
+</div>
+
+{% if values and col %}
+<div class="alert alert-success" role="alert">
+    The mode for a <b>{{col}}</b> column is: <b>{{values}}</b>
+</div>
+{% endif %}
+{% if values_mean and col %}
+<div class="alert alert-success" role="alert">
+    The mean for a <b>{{col}}</b> column is: <b>{{values_mean}}</b>
+</div>
+{% endif %}
+
+{% if values_median and col %}
+<div class="alert alert-success" role="alert">
+    The median for a <b>{{col}}</b> column is: <b>{{values_median}}</b>
+</div>
+{% endif %}
+
+{% if values_range and col %}
+<div class="alert alert-success" role="alert">
+    The range for a <b>{{col}}</b> column is: <b>{{values_range}}</b>
+</div>
+
+{% endif %}
+
+{% if values_q1 and col %}
+<div class="alert alert-success" role="alert">
+    The Q1 for a <b>{{col}}</b> column is: <b>{{values_q1}}</b>
+</div>
+{% endif %}
+
+{% if values_q2 and col %}
+<div class="alert alert-success" role="alert">
+    The Q2 for a <b>{{col}}</b> column is: <b>{{values_q2}}</b>
+</div>
+{% endif %}
+
+{% if values_q3 and col %}
+<div class="alert alert-success" role="alert">
+    The Q3 for a <b>{{col}}</b> column is: <b>{{values_q3}}</b>
+</div>
+{% endif %}
+
+{% if values_iqr and col %}
+<div class="alert alert-success" role="alert">
+    The IQR for a <b>{{col}}</b> column is: <b>{{values_iqr}}</b>
+</div>
+{% endif %}
+
+{% if values_summary and col %}
+<div class="alert alert-success" role="alert">
+    The five numbers summary for a <b>{{col}}</b> column is: <b>{{values_summary}}</b> -> (min, Q1, median, Q2, max)
+</div>
+{% endif %}
+
+{{html_table|safe}}
+
+{% endblock %}

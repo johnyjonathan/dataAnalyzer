@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="d-flex justify-content-center mt-5 ">
+    <img class="ms-5" src="data:image/png;base64, {{plot|safe}}">
+</div>
+
+
+{%endblock%}

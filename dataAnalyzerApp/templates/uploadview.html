@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<div class="d-flex justify-content-center mt-5 ">
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %} 
+    <h2> Import .csv file </h2>
+    <div class="mb-3">
+
+        <input type="file" class="form-control mt-3 " id="file_input" aria-describedby="file-input" name="csv_file">
+        <div class="form-check form-switch m-3">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" data-bs-toggle="collapse" data-bs-target="#collapseColumns" name="columns">
+            <label class="form-check-label" for="flexSwitchCheckDefault" >File doesn't contain column names</label>
+        </div>
+        
+        <div class="collapse" id="collapseColumns">
+            
+            <div class="mb-3">
+                <label for="ColumnsInput" class="form-label">Column names</label>
+                <input type="text" class="form-control" id="ColumnsInput" aria-describedby="columns" name="columns_data">
+                <div id="columnshelp" class="form-text">Enter column names separated by a <b>comma</b>.</div>
+              </div>
+            
+          </div>
+          <input type="submit" class="btn btn-primary btn-sm mt-3" value="Submit" name="file_submit_button">
+    </div>
+</form>
+</div>
+{% endblock %}
