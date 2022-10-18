@@ -26,8 +26,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form method="POST">
-            {%csrf_token%}
+         
             {% for element in numeric_cols %}
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="cols_for_plot" id="cols_checkbox" value="{{element}}">
@@ -37,15 +36,25 @@
             </div>
             {%endfor%}
             <div class="form-check form-switch mt-3">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="class_separation">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="class_separation" data-bs-toggle="collapse" data-bs-target="#collapseClasses">
                 <label class="form-check-label" for="flexSwitchCheckDefault">class separation</label>
             </div>
+            <div class="collapse" id="collapseClasses">
             
+              <div class="col-4 mx-3 mb-3">
+                <select class="form-select" aria-label="Default select example" name="class_select">
+                    {% for element in classes %}
+                    <option value="{{element}}"> {{element}} </option>
+                {% endfor %}
+                  </select>
+                </div>
+              
+            </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <input type="submit" class="btn btn-primary" name="generate_plot" value="Generate">
-        </form>
+        
         </div>
       </div>
     </div>
@@ -57,7 +66,7 @@
 {% endfor %}
   </select>
 </div>
-
+</form>
 {% if values and col %}
 <div class="alert alert-success" role="alert">
     The mode for a <b>{{col}}</b> column is: <b>{{values}}</b>

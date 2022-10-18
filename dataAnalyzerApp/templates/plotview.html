@@ -3,9 +3,20 @@
 {% block content %}
 {% load static %}
 
+{% if plot %}
 <div class="d-flex justify-content-center mt-5 ">
     <img class="ms-5" src="data:image/png;base64, {{plot|safe}}">
 </div>
+{%endif%}
+
+{% if plots %}
+<div class="d-flex justify-content-center mt-5 ">
+    {% for plot in plots %}
+    <img class="ms-5" src="data:image/png;base64, {{plot|safe}}">
+    {%endfor%}
+</div>
+{%endif%}
+
 
 
 {%endblock%}
