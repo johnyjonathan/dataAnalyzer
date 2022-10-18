@@ -2,6 +2,9 @@
 
 {% block content %}
 {% load static %}
+
+
+
 <div class="d-flex justify-content-center mt-5 ">
 
 <form method="POST" enctype="multipart/form-data">
@@ -18,12 +21,17 @@
         <div class="collapse" id="collapseColumns">
             
             <div class="mb-3">
-                <label for="ColumnsInput" class="form-label">Column names</label>
-                <input type="text" class="form-control" id="ColumnsInput" aria-describedby="columns" name="columns_data">
-                <div id="columnshelp" class="form-text">Enter column names separated by a <b>comma</b>.</div>
+                <label for="customRange2" class="form-label">Example range</label>
+                <input type="range" class="form-range" min="0" max="15" id="member", name="member" oninput="this.nextElementSibling.value = this.value" value="this.nextElementSibling.value = this.value">
+                <output></output>
+                <div id="columnshelp" class="form-text">Enter number of columns <a href="#" id="filldetails" onclick="addFields()">and press this.</a></div>
+              
+              <div id="container"/>
+                  </div>
               </div>
-            
+              
           </div>
+          
           <input type="submit" class="btn btn-primary btn-sm mt-3" value="Submit" name="file_submit_button">
     </div>
 </form>

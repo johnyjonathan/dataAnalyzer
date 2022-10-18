@@ -16,4 +16,31 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type='text/javascript'>
+    function addFields(){
+        // Generate a dynamic number of inputs
+        var number = document.getElementById("member").value;
+        // Get the element where the inputs will be added to
+        var container = document.getElementById("container");
+        // Remove every children it had before
+        while (container.hasChildNodes()) {
+            container.removeChild(container.lastChild);
+        }
+        for (i=0;i<number;i++){
+            var input_div = document.createElement("div");
+            input_div.className="input-group mb-3";
+            container.appendChild(input_div)
+            // Append a node with a random text
+            // Create an <input> element, set its type and name attributes
+            var input = document.createElement("input");
+            input.type = "text";
+            input.placeholder="Column " + (i+1);
+            input.name = "column" + i;
+            input.className = "form-control";
+            container.appendChild(input);
+            // Append a line break 
+            
+        }
+    }
+</script>
 </html>

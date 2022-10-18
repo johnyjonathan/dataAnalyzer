@@ -14,14 +14,16 @@ def uploadView(request):
             post_files = request.FILES
             csv_data = post_files['csv_file']
             if request.POST['columns'] == "on":
-                column_names = request.POST['columns_data'].split(",")
-                data_frame = pandas.read_csv(csv_data, names=column_names, header=None)
-                columns = request.session['columns'] = column_names
+                inputs_number = int(request.POST["member"])
+                inputs_names = ['column'+ str(number) for number in range(0,inputs_number)]
+                inputs_values = [request.POST[name] for name in inputs_names]
+                data_frame = pandas.read_csv(csv_data, names=inputs_values, header=None)
+                request.session['columns'] = inputs_values
             else:
                 data_frame = pandas.read_csv(csv_data)
 
             request.session['data'] = data_frame.to_json()
-            return redirect("mainView")     
+            return redirect("mainView")
 
 def mainView(request):
     json_data = request.session['data']
@@ -88,12 +90,13 @@ def mainView(request):
             selected_columns = request.POST.getlist("cols_for_plot")
             if request.POST.get("class_separation"):
                 selected_class = request.POST["class_select"]
-                list_of_classes_from_column = data_frame[selected_class].drop_duplicates().tolist()
-                list_of_dfs = [data_frame[selected_class].str.contains(option) for option in list_of_classes_from_column]
+                list_of_unique_classes = data_frame[selected_class].unique()
+                list_of_dfs_by_class = [data_frame.loc[data_frame[selected_class] == element] for element in list_of_unique_classes]
                 classes_graphs = []
-                for df in list_of_dfs:
+                for df in range(len(list_of_dfs_by_class)):
                     fig = plt.figure()
-                    boxplot = df.to_frame().boxplot(column=selected_columns)
+                    plt.title(list_of_unique_classes[df])
+                    boxplot = list_of_dfs_by_class[df].boxplot(column=selected_columns)
                     buffer = io.BytesIO()
                     plt.savefig(buffer,format="png")
                     buffer.seek(0)
