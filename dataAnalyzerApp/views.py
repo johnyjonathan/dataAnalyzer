@@ -1,10 +1,13 @@
+from xmlrpc.client import DateTime
 import pandas, urllib, base64, io, json
 import matplotlib.pyplot as plt
 import numpy as np
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from dataAnalyzerApp import utilities
-
+import xlsxwriter
+from dataAnalyzer.settings import BASE_DIR
+from datetime import datetime, date
 
 def uploadView(request):
     if request.method == "GET":
@@ -120,3 +123,23 @@ def mainView(request):
                 buffer.close()
 
             return render(request,'plotview.html',{'plot':graph}) 
+
+        if request.POST.get("summary_to_table"):
+            index = ('Min', 'Q1', 'Median', 'Q3', 'Max')
+            df_table = pandas.DataFrame(columns=numeric_cols, index= index)
+            for column in numeric_cols:
+                data_from_col = utilities.summaryFiveNumbers(data_frame[column])
+                df_table[column] = data_from_col
+            
+            str_date = str(datetime.now().replace(second=0)).replace(" ","-")
+            new_str = str_date.replace(":","_")
+            final_date = new_str.replace(".","")
+            name = "wyniki" + "_" + final_date + '.xlsx'
+            path_ = str(BASE_DIR) + '\\files\\' + name
+            writer = pandas.ExcelWriter(path_, engine='xlsxwriter')
+            df_table.to_excel(writer, sheet_name = "zeszyt")
+            writer.save()
+            print(df_table)
+
+            return render(request,'mainview.html',{'html_table': html_table, 'columns': request.session['columns'], 'numeric_cols': numeric_cols, 'classes': classes})
+            
